@@ -5,15 +5,15 @@ public class MoveFlashcard : MonoBehaviour {
 
 	public Texture[] cardsFront;
 	public Texture[] cardsBack;
+    public Animator anim;
 	public Renderer rend;
 	int index = 0;
 	bool lookingAtBack = false;
-	Animator anim;
 
 	// Use this for initialization
 	void Start () {
 		rend = GetComponent<Renderer>();
-		anim = GetComponent<Animator> ();
+        anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -32,16 +32,16 @@ public class MoveFlashcard : MonoBehaviour {
 					isPressed = true;
 				}
 				else if(Input.GetAxis("Horizontal") < 0){
-					//rend.material.mainTexture = cardsBack[index];
-					anim.SetBool ("IsFlipping", true);
+                    //rend.material.mainTexture = cardsBack[index];
+                    anim.SetTrigger("KeyPressed");
 					lookingAtBack = true;
 					isPressed = true;
 				}
 			}
 			else{
 				if(Input.GetAxis("Horizontal") == 0){
-					//rend.material.mainTexture = cardsFront[index];
-					anim.SetBool ("IsFlipping", false);
+                    //rend.material.mainTexture = cardsFront[index];
+                    anim.SetTrigger("KeyPressed");
 					lookingAtBack = false;
 					isPressed = false;
 				}
@@ -52,11 +52,15 @@ public class MoveFlashcard : MonoBehaviour {
 		}
 	}
 
-	void MakeTextureChange() {
-		if (anim.GetBool ("IsFlipping") == true) {
-			rend.material.mainTexture = cardsBack [index];
-		} else {
-			rend.material.mainTexture = cardsFront[index];
-		}
-	}
+    void changeTextures()
+    {
+        if (lookingAtBack == false)
+        {
+            rend.material.mainTexture = cardsFront[index];
+        }
+        else
+        {
+            rend.material.mainTexture = cardsBack[index];
+        }
+    }
 }
