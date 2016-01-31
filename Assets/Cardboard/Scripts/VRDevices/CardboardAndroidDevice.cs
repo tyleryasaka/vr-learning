@@ -55,10 +55,6 @@ public class CardboardAndroidDevice : BaseCardboardDevice {
     }
   }
 
-  public override void SetUILayerEnabled(bool enabled) {
-    CallObjectMethod(activityListener, "setUILayerEnabled", enabled);
-  }
-
   public override void SetVRModeEnabled(bool enabled) {
     CallObjectMethod(activityListener, "setVRModeEnabled", enabled);
   }
