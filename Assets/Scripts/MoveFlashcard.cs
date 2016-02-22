@@ -8,6 +8,7 @@ public class MoveFlashcard : MonoBehaviour {
 	public Texture[] sampleFront;
 	public Texture[] sampleBack;
     public Animator anim;
+	public Animator transition;
 	public Renderer rend;
 	int index = 0;
 	bool lookingAtBack = false;
@@ -17,6 +18,7 @@ public class MoveFlashcard : MonoBehaviour {
 	void Start () {
 		rend = GetComponent<Renderer>();
         anim = GetComponent<Animator>();
+		transition = GameObject.Find ("TransitionCard").GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -32,26 +34,27 @@ public class MoveFlashcard : MonoBehaviour {
 		if(!isPressed){
 			if(!lookingAtBack){
 				if(Input.GetAxis("Vertical") > 0){
+					// fade texture
+					transition.SetTrigger("OnCardChange");
 					if (tutorialMode) {
 						index = (index + 1) % sampleFront.Length;
-						rend.material.mainTexture = sampleFront[index];
+						//rend.material.mainTexture = sampleFront[index];
 					} else {
 						index = (index + 1) % cardsFront.Length;
-						rend.material.mainTexture = cardsFront[index];
+						//rend.material.mainTexture = cardsFront[index];
 					}
-					// fade texture
 					isPressed = true;
 				}
 				else if(Input.GetAxis("Vertical") < 0){
+					// fade texture
+					transition.SetTrigger("OnCardChange");
 					if (tutorialMode) {
 						index = (index + sampleFront.Length - 1) % sampleFront.Length;
-						rend.material.mainTexture = sampleFront[index];
+						//rend.material.mainTexture = sampleFront[index];
 					} else {
 						index = (index + cardsFront.Length - 1) % cardsFront.Length;
-						rend.material.mainTexture = cardsFront[index];
+						//rend.material.mainTexture = cardsFront[index];
 					}
-					// fade texture
-
 					isPressed = true;
 				}
 				else if(Input.GetAxis("Horizontal") < 0){
@@ -75,6 +78,7 @@ public class MoveFlashcard : MonoBehaviour {
 		}
 	}
 
+	// change to the card's back texture
     void changeTextures()
     {
         if (lookingAtBack == false)
@@ -90,4 +94,14 @@ public class MoveFlashcard : MonoBehaviour {
             else rend.material.mainTexture = cardsBack[index];
         }
     }
+
+	// change the texture on the face of the card
+	public void changeCards()
+	{
+		if (tutorialMode) {
+			rend.material.mainTexture = sampleFront [index];
+		} else {
+			rend.material.mainTexture = cardsFront [index];
+		}
+	}
 }
